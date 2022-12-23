@@ -1,3 +1,6 @@
+const PLAYER_WIN = 'p'
+const COMPUTER_WIN = 'c'
+const DRAW = 'd'
 function getComputerChoice() {
     values = ['rock', 'paper', 'scissor']
     return values[Math.floor(Math.random() * 3)]
@@ -5,21 +8,47 @@ function getComputerChoice() {
 
 function playRound(playSelection, compSelection) {
     playSelection = playSelection.toLowerCase()
-
     if (playSelection == 'rock' && compSelection == 'scissor') {
-        return 'You win! Rock beats Scissor'
+        return PLAYER_WIN
     } else if (playSelection == 'scissor' && compSelection == 'paper') {
-        return 'You win! Scissor beats paper'
+        return PLAYER_WIN
     } else if (playSelection == 'paper' && compSelection == 'rock') {
-        return 'You win! Paper beats Rock'
+        return PLAYER_WIN
     } else if (playSelection == compSelection) {
-        return 'Game tied!'
+        return DRAW
     } else {
-        compSelection = compSelection[0].toUpperCase() + compSelection.slice(1).toLowerCase()
-        playSelection = playSelection[0].toUpperCase() + playSelection.slice(1).toLowerCase()
-        return `You Lose! ${compSelection} beats ${playSelection}`
+        return COMPUTER_WIN
     }
 }
 
-playSelection = prompt('Choose rock, paper or scissor.')
-console.log(playRound(playSelection, getComputerChoice()))
+function game(n) {
+    let playerCount = 0;
+    let compCount = 0;
+    let drawCount = 0;
+
+    for (let i = 0; i < n; i++) {
+        playSelection = prompt('Enter your selection');
+        round = playRound(playSelection, getComputerChoice());
+        if (round == PLAYER_WIN) {
+            playerCount++;
+            console.log(`Round ${i+1}, Player wins!`)
+        } else if (round == COMPUTER_WIN) {
+            compCount++;
+            console.log(`Round ${i+1}, Computer wins!`)
+        } else {
+            drawCount++;
+            console.log(`Round ${i+1}, It's a draw!`)
+        }
+    }
+    console.log('Game completed\n')
+    if (playerCount > compCount) {
+        console.log('Player WINS!')
+    } else if (playerCount < compCount) {
+        console.log('Computer WINS!')
+    } else {
+        console.log('Its a DRAWWWW!')
+    }
+}
+
+n = prompt('Welcome to Rock Paper Scissors. How many rounds to you want in a game?')
+game(n)
