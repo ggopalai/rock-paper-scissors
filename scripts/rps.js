@@ -21,34 +21,56 @@ function playRound(playSelection, compSelection) {
     }
 }
 
-function game(n) {
-    let playerCount = 0;
-    let compCount = 0;
-    let drawCount = 0;
+const btns = document.querySelectorAll('button');
+const body = document.querySelector('body')
+var roundCounter = 0;
+var pcount = 0;
+var ccount = 0;
+var dcount = 0;
 
-    for (let i = 0; i < n; i++) {
-        playSelection = prompt('Enter your selection');
-        round = playRound(playSelection, getComputerChoice());
-        if (round == PLAYER_WIN) {
-            playerCount++;
-            console.log(`Round ${i+1}, Player wins!`);
-        } else if (round == COMPUTER_WIN) {
-            compCount++;
-            console.log(`Round ${i+1}, Computer wins!`);
-        } else {
-            drawCount++;
-            console.log(`Round ${i+1}, It's a draw!`);
-        }
-    }
-    console.log('Game completed\n')
-    if (playerCount > compCount) {
-        console.log('Player WINS!');
-    } else if (playerCount < compCount) {
-        console.log('Computer WINS!');
+function playRoundWrapper(playerSelection, compSelection) {
+    const winner = playRound(playerSelection, compSelection);
+    const div = document.createElement('div');
+    let roundText;
+    if (winner == PLAYER_WIN) {
+        roundText = `Round ${roundCounter + 1} - PLAYER WINS!`;
+    } else if (winner == COMPUTER_WIN) { 
+        roundText = `Round ${roundCounter + 1} - COMPUTER WINS!`;
     } else {
-        console.log('Its a DRAWWWW!');
+        roundText = `Round ${roundCounter + 1} - DRAW!`;
     }
+    div.textContent = roundText;
+    body.appendChild(div);
+    if (winner == PLAYER_WIN) {
+        pcount++;
+    } else if (winner == COMPUTER_WIN) {
+        ccount++;
+    } else {
+        dcount++;
+    }
+    roundCounter++;
+
+    let fw;
+    if (roundCounter == 5) {
+        if (pcount > ccount) {
+            fw = 'Player Wins';
+        } else if (pcount < ccount) {
+            fw = 'Computer Wins';
+        } else {
+            fw = 'Draw!';
+        }
+        const div2 = document.createElement('div');
+        div2.textContent = fw;
+        body.appendChild(div2);
+    }
+
 }
 
-n = prompt('Welcome to Rock Paper Scissors. How many rounds to you want in a game?');
-game(n);
+btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        playRoundWrapper(btn.innerHTML.toLowerCase(), getComputerChoice());
+    })
+});
+
+
+
